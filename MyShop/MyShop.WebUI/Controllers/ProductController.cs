@@ -6,19 +6,20 @@ using System.Web.Mvc;
 using MyShop.Core.Models;
 using MyShop.Core.ViewModel;
 using MyShop.DataAccess.InMemory;
+using MyShop.Core.Contracts;
 
 namespace MyShop.WebUI.Controllers
 {
     public class ProductController : Controller
     {
 
-        public GenericRepository<Product> context;
-        public GenericRepository<ProductCategory> ProductCategorycontext; 
+        public IRepository<Product> context;
+        public IRepository<ProductCategory> ProductCategories; 
 
-        public ProductController ()
+        public ProductController (IRepository<Product> ProductContext, IRepository<ProductCategory> ProductCategoryContext )
         {
-            context = new GenericRepository<Product>();
-            ProductCategorycontext = new GenericRepository<ProductCategory>();
+            context = ProductContext;
+            ProductCategories = ProductCategoryContext;
         }
 
         // GET: Product
@@ -34,7 +35,7 @@ namespace MyShop.WebUI.Controllers
         {
             ProductViewModel productViewModel = new ProductViewModel();
             productViewModel.Product = new Product();
-            productViewModel.ProductCategories = ProductCategorycontext.Collection();
+            productViewModel.ProductCategories = ProductCategories.Collection();
 
             return View(productViewModel);
 
@@ -70,7 +71,7 @@ namespace MyShop.WebUI.Controllers
             {
                 ProductViewModel productViewModel = new ProductViewModel();
                 productViewModel.Product = product;
-                productViewModel.ProductCategories = ProductCategorycontext.Collection();
+                productViewModel.ProductCategories = ProductCategories.Collection();
                 
                 return View(productViewModel);
             }
