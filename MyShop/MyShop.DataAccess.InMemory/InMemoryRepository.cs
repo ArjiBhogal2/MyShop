@@ -9,14 +9,14 @@ using MyShop.Core.Contracts;
 
 namespace MyShop.DataAccess.InMemory
 {
-    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
+    public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
         ObjectCache cache = MemoryCache.Default;
         List<T> items;
         string className;
 
 
-        public GenericRepository()
+        public InMemoryRepository()
         {
             className = typeof(T).Name;
             items = cache[className] as List<T>;
@@ -66,9 +66,9 @@ namespace MyShop.DataAccess.InMemory
             }
         }
 
-        public void Delete(T item)
+        public void Delete(string Id)
         {
-            T productToDelete = items.Find(i => i.ID == item.ID);
+            T productToDelete = items.Find(i => i.ID == Id);
 
             if (productToDelete != null)
             {

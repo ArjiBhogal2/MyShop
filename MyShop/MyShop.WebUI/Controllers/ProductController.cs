@@ -133,7 +133,7 @@ namespace MyShop.WebUI.Controllers
             else
             {
 
-                context.Delete(ProductToDelete);
+                context.Delete(ProductToDelete.ID);
                 context.Commit();
                 return RedirectToAction("Index");
             }

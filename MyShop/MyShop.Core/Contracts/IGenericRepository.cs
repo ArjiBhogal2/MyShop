@@ -7,7 +7,7 @@ namespace MyShop.Core.Contracts
     {
         IQueryable<T> Collection();
         void Commit();
-        void Delete(T item);
+        void Delete(string Id);
         T Find(string Id);
         void Insert(T item);
         void Update(T item);
