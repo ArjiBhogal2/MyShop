@@ -7,6 +7,7 @@ using MyShop.Core.Models;
 using MyShop.Core.ViewModel;
 using MyShop.DataAccess.InMemory;
 using MyShop.Core.Contracts;
+using System.IO;
 
 namespace MyShop.WebUI.Controllers
 {
@@ -41,7 +42,7 @@ namespace MyShop.WebUI.Controllers
 
         }
         [HttpPost]
-        public ActionResult Create(Product product)
+        public ActionResult Create(Product product, HttpPostedFileBase file)
         {
          
             if (!ModelState.IsValid )
@@ -51,6 +52,12 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
+                if(file != null)
+                {
+                    product.image = product.ID + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("//Content//ProductImage//") + product.image);
+                }
+
                 context.Insert(product);
                 context.Commit();
 
@@ -69,6 +76,7 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
+
                 ProductViewModel productViewModel = new ProductViewModel();
                 productViewModel.Product = product;
                 productViewModel.ProductCategories = ProductCategories.Collection();
@@ -77,7 +85,7 @@ namespace MyShop.WebUI.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Edit(Product product, string Id)
+        public ActionResult Edit(Product product, string Id, HttpPostedFileBase file)
         {
             Product ProductToEdit = context.Find(Id);
             if (ProductToEdit == null)
@@ -87,17 +95,25 @@ namespace MyShop.WebUI.Controllers
             else
             {
 
-                if (!ModelState.IsValid) {              
-                    return View(product);
+                if (!ModelState.IsValid) {
+                    ProductViewModel productViewModel = new ProductViewModel();
+                    productViewModel.Product = product;
+                    productViewModel.ProductCategories = ProductCategories.Collection();
+
+                    return View(productViewModel);
                 }
                 else
-                {     
-
+                {
+                    if (file != null)
+                    {
+                        ProductToEdit.image = product.ID + Path.GetExtension(file.FileName);
+                        file.SaveAs(Server.MapPath("//Content//ProductImage//") + ProductToEdit.image);
+                    }
                     ProductToEdit.Name = product.Name;
                     ProductToEdit.Description = product.Description;
                     ProductToEdit.Category = product.Category;
                     ProductToEdit.Price = product.Price;
-                    ProductToEdit.image = product.image;
+
 
                     context.Commit();
 
