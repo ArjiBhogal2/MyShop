@@ -28,17 +28,17 @@
         <img class="img" style="height:250px" src="~/Content/ProductImage/@item.image" />
     </div>
     <div class="col-md-12">
-        <strong>@Html.ActionLink(item.Name, "Details", new { id = item.ID })</strong>
+        <strong>@Html.ActionLink(item.Name, "Details", new { ID = item.ID })</strong>
 
     </div>
     <div class="col-md-12">
        <p> @item.Description </p>
     </div>
     <div class="col-md-12">
-       <h4>> @item.Price </h4>
+       <h4> @item.Price </h4>
     </div>
     <div class="col-md-12">
-        <a href="#" class="btn btn-default">Add to Basket</a>
+        <a href="@Url.Action("AddToBasket", "Basket", new { ProductID = item.ID } )" class="btn btn-default">Add to Basket</a>
     </div>
 
 </div> 
