@@ -45,7 +45,7 @@
         @String.Format("{0:c}", item.Price * item.Quantity)
         </td>
     <td>
-        <a href="@Url.Action("RemoveFromBasket", "Basket" , new {ProductID= item.ID })" class="btn btn-danger">Delete</a>
+        <a href="@Url.Action("RemoveFromBasket", "Basket" , new {ProductID= item.ProductID })" class="btn btn-danger">Delete</a>
     </td>
 </tr>
 }

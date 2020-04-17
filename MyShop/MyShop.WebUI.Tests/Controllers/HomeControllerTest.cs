@@ -6,49 +6,39 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyShop.WebUI;
 using MyShop.WebUI.Controllers;
+using MyShop.WebUI.Tests.Mocks;
+using MyShop.Core.Models;
+using MyShop.Core.Contracts;
+using MyShop.Core.ViewModel;
 
 namespace MyShop.WebUI.Tests.Controllers
 {
-    [TestClass]
-    public class HomeControllerTest
-    {
-        [TestMethod]
-        public void Index()
-        {
-            // Arrange
-        //    HomeController controller = new HomeController();
+	[TestClass]
+	public class HomeControllerTest
+	{
+		[TestMethod]
+		public void IndexPageDoesReturnProduct()
 
-        //    // Act
-        //    ViewResult result = controller.Index() as ViewResult;
 
-        //    // Assert
-        //    Assert.IsNotNull(result);
-        }
+		{
 
-        [TestMethod]
-        public void About()
-        {
-            // Arrange
-        //    HomeController controller = new HomeController();
+			IRepository<Product> ProductMockContext = new mockContext<Product>();
+			IRepository<ProductCategory> ProductCategoryMockContext = new mockContext<ProductCategory>();
 
-        //    // Act
-        //    ViewResult result = controller.About() as ViewResult;
 
-        //    // Assert
-        //    Assert.AreEqual("Your application description page.", result.ViewBag.Message);
-        }
+		  HomeController homeController = new HomeController(ProductMockContext, ProductCategoryMockContext );
 
-        [TestMethod]
-        public void Contact()
-        {
-            // Arrange
-            //HomeController controller = new HomeController();
+			ProductMockContext.Insert(new Product());
 
-            //// Act
-            //ViewResult result = controller.Contact() as ViewResult;
+			var result = homeController.Index() as ViewResult;
+			var prodListResult = (ProductListViewModel)homeController.ViewData.Model;
 
-            //// Assert
-            //Assert.IsNotNull(result);
-        }
-    }
+			Assert.AreEqual(1, prodListResult.Products.Count());
+
+
+
+		}
+
+
+	}
 }

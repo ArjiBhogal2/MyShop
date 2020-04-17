@@ -36,6 +36,10 @@ namespace MyShop.Services
                 if (!string.IsNullOrEmpty(basketId))
                 {
                     basket = basketContext.Find(basketId);
+                    if (basket == null)
+                    {
+                        basket = CreateNewBasket(httpContext);
+                    }
                 }
                 else
                 {
@@ -73,6 +77,8 @@ namespace MyShop.Services
         public void AddtoBasket(HttpContextBase httpContext, string productId)
         {
             Basket basket = GetBasket(httpContext, true);
+
+
             BasketItem item = basket.BasketItems.FirstOrDefault(i => i.ProductID == productId);
 
             if (item == null)
@@ -116,7 +122,7 @@ namespace MyShop.Services
                                join p in productContext.Collection() on b.ProductID equals p.ID
                                select new BasketItemViewModel()
                                {
-                                   ID = p.ID,
+                                   ProductID = p.ID,
                                    Quantity = b.Quantity,
                                    Name = p.Name,
                                    Price = p.Price,
@@ -139,6 +145,7 @@ namespace MyShop.Services
 
             if (basket != null)
             {
+                
                 int? basketCount = (from item in basket.BasketItems
                                     select item.Quantity).Sum();
                 decimal? basketTotal = (from item in basket.BasketItems
